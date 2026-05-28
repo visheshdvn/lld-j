@@ -6,11 +6,20 @@ import interfaces.MoveProvider;
 import models.Move;
 
 public class CommandlineInputProviderStrategy implements MoveProvider {
+
+    private final Scanner scanner;
+
+    public CommandlineInputProviderStrategy() {
+        this(new Scanner(System.in));
+    }
+
+    public CommandlineInputProviderStrategy(Scanner scanner) {
+        this.scanner = scanner;
+    }
     
     @Override
     public Move getMove() {
-        Scanner scan = new Scanner(System.in);
-        String position = scan.nextLine();
+        String position = scanner.nextLine();
         // scan.close();
 
         String[] coordinate = position.split(",");
