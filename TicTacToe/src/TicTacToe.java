@@ -1,18 +1,21 @@
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 import enums.Symbol;
+import interfaces.MoveProvider;
 import models.Board;
 import models.Cell;
+import models.Move;
 import models.Pair;
 import models.Player;
+import utils.CommandlineInputProviderStrategy;
 
 public class TicTacToe {
 
     Board board;
     Deque<Player> players = new LinkedList<>();
+    MoveProvider inputProvier = new CommandlineInputProviderStrategy();
 
     // board.paintBoard();
     // board.addPiece(Symbol.X);
@@ -54,7 +57,7 @@ public class TicTacToe {
             }
 
             // check for winner - if yes -> return the current player
-            boolean isWinner = checkForWinner(pos[0], pos[1], currentPlayer.getPiece());
+            boolean isWinner = checkForWinner(move.row, move.column, currentPlayer.getPiece());
             if(isWinner) {
                 return currentPlayer;
             }
@@ -64,17 +67,7 @@ public class TicTacToe {
         }
     }
 
-    private int[] getInsertionPosition() {
-        Scanner scan = new Scanner(System.in);
-        String position = scan.nextLine();
-        // scan.close();
-
-        String[] coordinate = position.split(",");
-        int row = Integer.valueOf(coordinate[0].trim());
-        int col = Integer.valueOf(coordinate[1].trim());
-
-        return new int[] {row, col};
-    }
+    
 
     public boolean checkForWinner(int row, int column, Symbol pieceType) {
 
