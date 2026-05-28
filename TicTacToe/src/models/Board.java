@@ -9,7 +9,7 @@ public class Board {
     public static final int DEFAULT_SIZE = 3;
 
     private Cell[][] board;
-    public int size;
+    private int size;
 
     public Board(int size) {
         initializeBoardWithSize(size);
@@ -23,14 +23,6 @@ public class Board {
 
     private void initializeBoardWithSize(int size) {
         board = new Cell[size][size];
-    }
-
-
-    /*
-    getter
-     */
-    public Cell[][] getBoard() {
-        return board;
     }
 
 
@@ -80,5 +72,52 @@ public class Board {
         }
 
         return freeCells;
+    }
+
+    public boolean checkForWinner(int row, int column, Symbol pieceType) {
+
+        boolean rowMatch = true;
+        boolean columnMatch = true;
+        boolean diagonalMatch = false;
+        boolean antiDiagonalMatch = false;
+
+        // Check Row
+        for (int i = 0; i < size; i++) {
+            if (board[row][i] == null || board[row][i].getSymbol() != pieceType) {
+                rowMatch = false;
+                break;
+            }
+        }
+
+        // Check Column
+        for (int i = 0; i < size; i++) {
+            if (board[i][column] == null || board[i][column].getSymbol() != pieceType) {
+                columnMatch = false;
+                break;
+            }
+        }
+
+        if(row == column) {
+            // Check Diagonally
+            boolean match = true;
+            for (int i = 0, j = 0; i < size; i++, j++) {
+                Cell currentCell = board[i][j];
+                match = match && (currentCell != null &&  currentCell.getSymbol() == pieceType);
+            }
+            diagonalMatch = match;
+        }
+        
+
+        if(row + column == size-1) {
+            // Check Anti-Diagonally
+            boolean match = true;
+            for (int i = 0, j = size - 1; i < size; i++, j--) {
+                Cell currentCell = board[i][j];
+                match = match && (currentCell != null &&  currentCell.getSymbol() == pieceType);
+            }
+            antiDiagonalMatch = match;
+        }
+
+        return rowMatch || columnMatch || diagonalMatch || antiDiagonalMatch;
     }
 }
