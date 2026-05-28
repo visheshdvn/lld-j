@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import enums.Symbol;
 import models.Board;
+import models.Cell;
 import models.Pair;
 import models.Player;
 
@@ -73,8 +74,8 @@ public class TicTacToe {
 
         boolean rowMatch = true;
         boolean columnMatch = true;
-        boolean diagonalMatch = true;
-        boolean antiDiagonalMatch = true;
+        boolean diagonalMatch = false;
+        boolean antiDiagonalMatch = false;
 
         // Check Row
         for (int i = 0; i < board.size; i++) {
@@ -92,20 +93,25 @@ public class TicTacToe {
             }
         }
 
-        // Check Diagonally
-        for (int i = 0, j = 0; i < board.size; i++, j++) {
-            if (board.getBoard()[i][j] == null || board.getBoard()[i][j].getSymbol() != pieceType) {
-                diagonalMatch = false;
-                break;
+        if(row == column) {
+            // Check Diagonally
+            boolean match = true;
+            for (int i = 0, j = 0; i < board.size; i++, j++) {
+                Cell currentCell = board.getBoard()[i][j];
+                match = match && (currentCell != null &&  currentCell.getSymbol() == pieceType);
             }
+            diagonalMatch = match;
         }
+        
 
-        // Check Anti-Diagonally
-        for (int i = 0, j = board.size - 1; i < board.size; i++, j--) {
-            if (board.getBoard()[i][j] == null || board.getBoard()[i][j].getSymbol() != pieceType) {
-                antiDiagonalMatch = false;
-                break;
+        if(row + column == board.size-1) {
+            // Check Anti-Diagonally
+            boolean match = true;
+            for (int i = 0, j = board.size - 1; i < board.size; i++, j--) {
+                Cell currentCell = board.getBoard()[i][j];
+                match = match && (currentCell != null &&  currentCell.getSymbol() == pieceType);
             }
+            antiDiagonalMatch = match;
         }
 
         return rowMatch || columnMatch || diagonalMatch || antiDiagonalMatch;
