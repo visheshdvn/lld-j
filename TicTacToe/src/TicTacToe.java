@@ -12,7 +12,7 @@ import models.Player;
 public class TicTacToe {
 
     Board board;
-    Deque<Player> palyers = new LinkedList<>();
+    Deque<Player> players = new LinkedList<>();
 
     // board.paintBoard();
     // board.addPiece(Symbol.X);
@@ -22,8 +22,8 @@ public class TicTacToe {
         // initilize players
         Player player1 = new Player("player 1", Symbol.X);
         Player player2 = new Player("player 2", Symbol.O);
-        palyers.add(player1);
-        palyers.add(player2);
+        players.add(player1);
+        players.add(player2);
 
         // initialize board
         board = new Board();
@@ -43,9 +43,15 @@ public class TicTacToe {
             }
 
             // if yes - let the player play
-            Player currentPlayer = palyers.removeFirst();
-            int[] pos = getInsertionPosition();
-            board.addPiece(pos[0], pos[1], currentPlayer.getPiece());
+            Player currentPlayer = players.removeFirst();
+            Move move = inputProvier.getMove();
+            boolean isMoveSuccessful = board.addPiece(move.row, move.column, currentPlayer.getPiece());
+
+            if(!isMoveSuccessful) {
+                System.out.println("Incorrect position chosen, try again!");
+                players.addFirst(currentPlayer); // Add the player back to the queue(in the front)
+                continue;
+            }
 
             // check for winner - if yes -> return the current player
             boolean isWinner = checkForWinner(pos[0], pos[1], currentPlayer.getPiece());
@@ -54,7 +60,7 @@ public class TicTacToe {
             }
 
             // if not add the current player to the last and continue
-            palyers.addLast(currentPlayer);
+            players.addLast(currentPlayer);
         }
     }
 

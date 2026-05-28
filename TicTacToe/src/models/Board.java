@@ -39,6 +39,10 @@ public class Board {
      */
 
     public boolean addPiece(int row, int col, Symbol piece) {
+        if(row >= size || col >= size) {
+            return false;
+        }
+
         if(board[row][col] != null) {
             return false;
         }
